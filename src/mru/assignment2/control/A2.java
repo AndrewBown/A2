@@ -20,7 +20,6 @@ public class A2 {
 	private SLL<Token> alphabeticalNodeList;
 	private SLL<Token> mostUsedNodeList;
 	private SLL<Token> leastUsedNodeList;
-
 	private ArrayList<String> stopWords;
 	private int totalWordCount;
 	private int stopWordWordCount;
@@ -29,7 +28,7 @@ public class A2 {
 
 	
 	/**
-	 * Constructor for the A2 class. It initializes the fileReader, printWords, wordList, and stopWords.
+	 * Constructor for the A2 class. It initializes the fileReader, printWords, alphabeticalNodeList, mostUsedNodeList, leastUsedNodeList, and stopWords.
 	 * It also reads in the file.
 	 */
 	public A2() {
@@ -59,7 +58,7 @@ public class A2 {
 	
 
 	/**
-	 * Main method for the program. It creates an instance of the A2 class and then calls the checkWords method, and then the printResults method.
+	 * Main method for the program. It creates an instance of the A2 class and then calls the sortAlphabetically, sortMostUsedWords, sortLeastUsedWords, and printResults methods.
 	 * @param args
 	 * @throws Exception
 	 */
@@ -76,99 +75,41 @@ public class A2 {
 	 * This method calls the print methods from the PrintWordLists class.
 	 */
 	public void printResults() {
-		printWords.totalWordCount(totalWordCount);
-		printWords.uniqueWordCount(uniqueWordCount);
-		printWords.stopWordCount(stopWordWordCount);
+		printWords.wordCounts(totalWordCount, "Total Words");
+		printWords.wordCounts(uniqueWordCount, "Unique Words");
+		printWords.wordCounts(stopWordWordCount, "Stop Words");
 
-		printWords.mostUsedWords(mostUsedNodeList);
-		printWords.leastUsedWords(leastUsedNodeList);
-		printWords.allWords(alphabeticalNodeList);		
-
-
-		// Collections.sort(wordList, new mostUsedWords());
-
-		// Collections.sort(wordList, new LeastUsedWords());
-		
-		// Collections.sort(wordList);
-		// printWords.allWords(wordList);
+		printWords.usedWordsList(mostUsedNodeList, "Most");
+		printWords.usedWordsList(leastUsedNodeList, "Least");
+		printWords.usedWordsList(alphabeticalNodeList, "All");		
 	}
 		
+
 	/**
-	 * This method reads the file and checks each word. For each word it updates the totalWordCount, stopWordWordCount, and uniqueWordCount
+	 * This method sorts the words alphabetically and then updates the word counts.
 	 */
-    // public void checkWords() {
-	// 	SLL<String> allWordsString = new SLL<String>(); //a list of all the words in the file, used to check if the word is already in wordList or not
-	// 	SLL<Token> allWordsToken = new SLL<Token>();
-
-	// 	// goes through each line in the file and checks each word in the line to see if it is a stop word or not and then updates the word counts
-    // 	while(fileReader.hasNextLine()) {
-	// 		String currLine = fileReader.nextLine().strip().toLowerCase().replaceAll("[^A-Za-z ]", "").replaceAll("\s+", " "); 		// used https://stackoverflow.com/questions/7233447/a-regex-to-match-strings-with-alphanumeric-spaces-and-punctuation for help with regex
-	// 	if(!(currLine.equals("") || currLine.equals(" "))) {
-	// 			for(String individualWordsInLine: currLine.strip().split(" ")) {
-	// 				Token word;
-	// 				word = new Token(individualWordsInLine, totalWordCount, stopWordWordCount, uniqueWordCount); 
-
-	// 				if(!(allWordsString.contains(word.getWord()))) { // if the word is not in the list of all words then it adds it to the list and updates the word counts
-
-	// 					if(stopWords.contains(word.getWord())) { // if the word is a stop word then it updates the word counts
-	// 						word.increaseIndividualWordCount();
-	// 						word.increaseStopWordWordCount();
-	// 						word.increaseTotalWordCount();
-	// 						allWordsString.add(word.getWord());
-	// 						allWordsToken.add(word);
-	// 					} else { // if the word is not a stop word then it updates the word counts
-	// 						word.increaseIndividualWordCount();
-	// 						word.increaseTotalWordCount();
-	// 						word.increaseUniqueWordCount();
-	// 						wordList.add(word);
-	// 						allWordsString.add(word.getWord());
-	// 						allWordsToken.add(word);
-	// 					}
-	// 				} else { // if the word is in the list of all words then it updates the word counts
-	// 					for(Token wordToCheck: allWordsToken) {
-	// 						if(wordToCheck.getWord().equals(word.getWord())) { // if the word is in the list of all words then it updates the word counts
-	// 							word.setIndividualWordCount(wordToCheck.getIndividualWordCount() + 1);
-	// 							wordToCheck.setIndividualWordCount(word.getIndividualWordCount());
-	// 							break;
-	// 						}
-	// 					}
-	// 					word.increaseTotalWordCount();
-	// 					if(stopWords.contains(word.getWord())) { // if the word is a stop word then it updates the word counts
-	// 						word.increaseStopWordWordCount();
-	// 					} 
-	// 				}
-	// 				totalWordCount = word.getTotalWordCount();
-	// 				stopWordWordCount = word.getStopWordWordCount();
-	// 				uniqueWordCount = word.getUniqueWordCount();
-	// 			}
-	// 		}
-    // 	}	
-	// }
-
 	public void sortAlphabetically() {
-		// goes through each line in the file and checks each word in the line to see if it is a stop word or not and then updates the word counts
     	while(fileReader.hasNextLine()) {
-
 			String currLine = fileReader.nextLine().strip().toLowerCase().replaceAll("[^A-Za-z ]", "").replaceAll("\s+", " "); 		// used https://stackoverflow.com/questions/7233447/a-regex-to-match-strings-with-alphanumeric-spaces-and-punctuation for help with regex
 			
 			if(!(currLine.equals("") || currLine.equals(" "))) {
-				for(String individualWordInLine: currLine.strip().split(" ")) {
+				for(String individualWordInLine: currLine.strip().split(" ")) {		// goes through each word in the line and checks if it is a stop word or not
 
-					if(alphabeticalNodeList.isEmpty()) {
+					if(alphabeticalNodeList.isEmpty()) {		// if the alphabeticalNodeList is empty, add the word to the list
 
-						if(stopWords.contains(individualWordInLine)) {
+						if(stopWords.contains(individualWordInLine)) {		// check if the word is a stop word
 							stopWordWordCount += 1;
 							totalWordCount += 1;
-						} else {
+						} else {								// if it is not a stop word, create a new node for the word and add it to the alphabetical node list
 							Token wordToken = new Token(individualWordInLine); 
-							Node<Token> wordTokenNode = new Node<Token>(wordToken);
+							Node<Token> wordTokenNode = new Node<Token>(wordToken);		// turn word into a node so it can be added to the list
 
-							alphabeticalNodeList.add(wordTokenNode.getData());
+							alphabeticalNodeList.add(0, wordTokenNode.getData()); 			// add the word to the alphabeticalNodeList
 							uniqueWordCount += 1;
 							totalWordCount += 1;
 						}
 					} else {
-						compareWords(individualWordInLine);
+						compareWords(individualWordInLine);		// compare the word to the words in the alphabeticalNodeList and add it to the list in the correctly ordered place if it is not already in the list
 					}
 				}
 			}
@@ -176,44 +117,51 @@ public class A2 {
 	}
 
 
+	/**
+	 * This method sorts the words from most used to least used.
+	 */
 	private void sortMostUsedWords() {
-		for(int i = 0; i < alphabeticalNodeList.size(); i++) {
+		for(int i = 0; i < alphabeticalNodeList.size(); i++) {			// goes through the alphabeticalNodeList and adds the nodes to the mostUsedNodeList in order of most used to least used
 			Node<Token> wordNode = new Node<Token>(alphabeticalNodeList.get(i));
-			mostUsedNodeList.sortMostToLeastUsedWords(wordNode);
+			mostUsedNodeList.addInOrder(wordNode, "mostUsed");
 		}
 	}
 
 
+	/**
+	 * This method sorts the words from least used to most used.
+	 */
 	private void sortLeastUsedWords() {
-		for(int i = 0; i < alphabeticalNodeList.size(); i++) {
+		for(int i = 0; i < alphabeticalNodeList.size(); i++) {		// goes through each word in the alphabeticalNodeList and adds it to the leastUsedNodeList in order of least used to most used
 			Node<Token> wordNode = new Node<Token>(alphabeticalNodeList.get(i));
-			leastUsedNodeList.sortLeastToMostUsedWords(wordNode);
+			leastUsedNodeList.addInOrder(wordNode, "leastUsed");
 		}
 	}
 
 
+	/**
+	 * This method compares the words to the words in the alphabeticalNodeList and updates the word counts.
+	 * @param individualWord String representing the word to be compared
+	 */
 	public void compareWords(String individualWord) {
 		Boolean wordMatched = false;
 
-		if(stopWords.contains(individualWord)) {
+		if(stopWords.contains(individualWord)) {			// check if the word is a stop word
 			stopWordWordCount += 1;
 			totalWordCount += 1;
 		} else {
-			for(int i = 0; i < alphabeticalNodeList.size(); i++) {
-
+			for(int i = 0; i < alphabeticalNodeList.size(); i++) {				// if it is not a stop word, check if it already exists in the alphabetical node list
 				if(alphabeticalNodeList.get(i).getWord().equals(individualWord)) {
 					alphabeticalNodeList.get(i).increaseIndividualWordCount();
 					alphabeticalNodeList.set(i, alphabeticalNodeList.get(i));
-					wordMatched = true;
-
+					wordMatched = true;			// matched set to true if the word is found
 					break;
 				}
 			}
-			if (!wordMatched) {
+			if (!wordMatched) {				// if the word is not found, create a new node for the word and add it to the alphabetical node list
 				Token wordToken = new Token(individualWord); 
 				Node<Token> wordTokenNode = new Node<Token>(wordToken);
-
-				alphabeticalNodeList.addInOrder(wordTokenNode);
+				alphabeticalNodeList.addInOrder(wordTokenNode, "alphabetical");
 				uniqueWordCount += 1;
 			}
 			totalWordCount += 1;
