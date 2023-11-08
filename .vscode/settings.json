@@ -1,9 +1,7 @@
 {
-    "files.autoSave": "afterDelay",
-    "java.project.explorer.showNonJavaResources": true,
-    "java.dependency.packagePresentation": "hierarchical",
-    "java.project.sourcePaths": [
-        "res",
-        "src"
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
     ]
 }

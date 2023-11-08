@@ -1,4 +1,4 @@
-package mru.assignment2.model;
+package mru.assignment3.model;
 
 /**
  * This class is used to store the information about each word.
